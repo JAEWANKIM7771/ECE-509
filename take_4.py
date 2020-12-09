@@ -1,5 +1,6 @@
 import os
 import sys
+import pypdftk as scm
 
 from PyPDF2 import PdfFileWriter, PdfFileReader
 
@@ -82,7 +83,7 @@ def insertMaliciousFiles():
     with open(payload, "rb") as pd:
         raw_payload = pd.read()
     
-    payload.close()
+    #payload.close()
     # Check if payload is base64 encoded
     var = isBase64(raw_payload, payload)
     # Create malicious files
