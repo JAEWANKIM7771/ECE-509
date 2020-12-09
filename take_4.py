@@ -1,5 +1,4 @@
 import os
-import setuptools
 import sys
 
 from PyPDF2 import PdfFileWriter, PdfFileReader
@@ -8,7 +7,7 @@ from PyPDF2 import PdfFileWriter, PdfFileReader
 
 def addJS():
 
-malicious_pdf = PdfFileWriter()
+    malicious_pdf = PdfFileWriter()
 
     # Open file passed as -i parameter
     with open(args.input, "rb") as f:
@@ -34,7 +33,7 @@ malicious_pdf = PdfFileWriter()
 
             output.close()
 
-        f.close()
+    f.close()
         
 # Check if payload provided is base64 encoded
 def isBase64(payload, filename):
@@ -104,4 +103,4 @@ def insertMaliciousFiles():
     
     
     
- insertMaliciousFiles()
+insertMaliciousFiles()
