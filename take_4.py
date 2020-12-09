@@ -79,8 +79,8 @@ def insertMaliciousFiles():
     
     raw_payload = ""
     # Read contents of payload file
-    with open(payload, "rb") as payload:
-        raw_payload = payload.read()
+    with open(payload, "rb") as pd:
+        raw_payload = pd.read()
     
     payload.close()
     # Check if payload is base64 encoded
