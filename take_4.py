@@ -6,7 +6,7 @@ import base64
 
 from PyPDF2 import PdfFileWriter, PdfFileReader
 
-payload = "mal-7.exe"
+payload = "meterpreter-64-take-8.exe"
 output = "new.pdf"
 inp = "sample.pdf"
 
