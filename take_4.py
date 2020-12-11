@@ -1,6 +1,6 @@
 import os
 import sys
-import pypdftk as scm
+import pypdftk
 import re
 import base64
 
